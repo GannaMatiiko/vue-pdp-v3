@@ -1,30 +1,35 @@
 export default {
     state() {
         return {
-            formGroups: []
+            formGroups: {}
         }
     },
     getters: {
         getFormGroups(state) {
             return state.formGroups;
+        },
+        getFormGroupById(state, id) {
+            return state.formGroups[id];
         }
     },
     actions: {
         saveForm(context, payload) {
             console.log(payload, 'inside actions');
             // here data will be sent to server
-
-            const formGroupItem = {
-                randomId: Math.floor(Date.now() * Math.random()),
-                ...payload
-            }
-
-            context.commit('mutateFormData', formGroupItem);
+            
+            context.commit('mutateFormData', payload);
+        },
+        initDeletingGroup(context, id) {
+            context.commit('deleteGroup', id);
         }
     },
     mutations: {
         mutateFormData(state, data) {
-            state.formGroups.push(data)
+            let randomId = Math.floor(Date.now() * Math.random());
+            state.formGroups[randomId] = data;
+        },
+        deleteGroup(state, id) {
+            delete state.formGroups[id];
         }
     },
 }

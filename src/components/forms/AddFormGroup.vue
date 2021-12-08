@@ -18,15 +18,19 @@
         <div>
           <div>
             <span>Field label*</span>
-            <input type="text" v-model="input.label" />
+            <input type="text" v-model="input.label"/>
           </div>
           <div>
             <span>Field name*</span>
-            <input type="text" v-model="input.name" />
+            <input type="text" v-model="input.name"/>
           </div>
           <div>
             <span>Field type*</span>
-            <select v-model="input.type" @change="onTypeChange($event, input)">
+            <select
+              v-model="input.type"
+              @change="onTypeChange($event, input)"
+              autocomplete="off"
+            >
               <option value="" disabled selected>Choose type</option>
               <option value="text">Text</option>
               <option value="textarea">Textarea</option>
@@ -38,8 +42,16 @@
           </div>
           <div>
             <span>Required?</span>
-            <input type="radio" value="true" v-model="input.isRequired" />
-            <input type="radio" value="false" v-model="input.isRequired" />
+            <input
+              type="radio"
+              value="true"
+              v-model="input.isRequired"
+            />
+            <input
+              type="radio"
+              value="false"
+              v-model="input.isRequired"
+            />
           </div>
           <div>
             <span>Default value</span>
@@ -56,14 +68,18 @@
           </div>
         </div>
         <div>
-          <base-button mode="outline" @click="deleteInput(i)"
-            >Delete</base-button
-          >
+          <base-button mode="outline" @click.prevent="deleteInput(i)">
+            Delete
+          </base-button>
         </div>
       </base-card>
     </form>
-    <base-button v-if="formGroup.inputsData.length > 0" @click="saveFormData()"
-      >Save</base-button
+    <base-button
+      v-if="formGroup.inputsData.length > 0"
+      @click="saveFormData()"
+      to="/forms-list"
+      link
+      >Save and go to list</base-button
     >
   </base-card>
 </template>
@@ -101,6 +117,8 @@ export default {
     saveFormData() {
       this.$store.dispatch("saveForm", this.formGroup);
       this.$refs.formGroup.reset();
+      // this.formGroup.title = '';
+      // this.formGroup.inputsData = [];
     },
   },
 };
