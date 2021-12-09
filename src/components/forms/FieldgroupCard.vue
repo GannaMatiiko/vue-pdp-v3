@@ -83,8 +83,7 @@ export default {
   },
   methods: {
     deleteInput(id) {
-        console.log(id);
-      this.selectedGroup = this.selectedGroup.inputsData.splice(id, 1);
+        this.selectedGroup.inputsData.splice(id, 1);
     },
   },
 };
