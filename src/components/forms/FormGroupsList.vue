@@ -10,6 +10,11 @@
           <router-link :to="`/fieldgroup-card/${index}`">
             {{ form.title }} ({{ form.inputsData.length }})
           </router-link>
+
+          <router-link :to="`/edit/${index}`">
+            <h2>{{ form.title }} ({{ form.inputsData.length }})</h2>
+          </router-link>
+
           <base-button @click="deleteGroup(index)">Delete</base-button>
         </div>
       </div>

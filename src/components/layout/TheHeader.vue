@@ -6,6 +6,7 @@
       <div>
         <router-link to="/forms-list">Created groups</router-link>
         <router-link to="/add-form-group">Add form group</router-link>
+        <router-link to="/add">NEW ADD FORM</router-link>
       </div>
     </nav>
   </header>

@@ -8,6 +8,14 @@ import TheHeader from './components/layout/TheHeader.vue';
 export default {
   components: {
     TheHeader
+  },
+  created() {
+    const createdFormGroups = JSON.parse(localStorage.getItem('createdFormGroups'));
+    if (createdFormGroups) {
+         this.$store.dispatch('loadFormData', createdFormGroups); 
+    }
+ 
+    
   }
 };
 </script>

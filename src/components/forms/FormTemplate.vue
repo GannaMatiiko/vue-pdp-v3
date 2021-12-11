@@ -3,35 +3,23 @@
     <h3>Create your form group</h3>
     <form ref="formGroup">
       <div class="form-title">
-        <input
-          type="text"
-          placeholder="Enter title for form group"
-          v-model="formGroup.title"
-        />
+        <input type="text" placeholder="Enter title for form group" v-model="formGroup.title" />
       </div>
       <base-button @click.prevent="addFormGroup">Add form group</base-button>
-      <base-card
-        v-for="(input, i) in formGroup.inputsData"
-        :key="i"
-        class="form-input-group"
-      >
+      <base-card v-for="(input, i) in formGroup.inputsData" :key="i" class="form-input-group">
         <div>
           <div>
             <span>Field label*</span>
-            <input type="text" v-model="input.label"/>
+            <input type="text" v-model="input.label" />
           </div>
           <div>
             <span>Field name*</span>
-            <input type="text" v-model="input.name"/>
+            <input type="text" v-model="input.name" />
           </div>
           <div>
             <span>Field type*</span>
-            <select
-              v-model="input.type"
-              @change="onTypeChange($event, input)"
-              autocomplete="off"
-            >
-              <option value="" disabled selected>Choose type</option>
+            <select v-model="input.type" @change="onTypeChange($event, input)" autocomplete="off">
+              <option value disabled selected>Choose type</option>
               <option value="text">Text</option>
               <option value="textarea">Textarea</option>
               <option value="image">Image</option>
@@ -42,16 +30,8 @@
           </div>
           <div>
             <span>Required?</span>
-            <input
-              type="radio"
-              value="true"
-              v-model="input.isRequired"
-            />
-            <input
-              type="radio"
-              value="false"
-              v-model="input.isRequired"
-            />
+            <input type="radio" value="true" v-model="input.isRequired" />
+            <input type="radio" value="false" v-model="input.isRequired" />
           </div>
           <div>
             <span>Default value</span>
@@ -60,7 +40,7 @@
           <div v-if="input.type === 'image'">
             <span>Preview size</span>
             <select v-model="input.previewSize">
-              <option value="" disabled selected>Choose image size</option>
+              <option value disabled selected>Choose image size</option>
               <option value="small">Small(150x150)</option>
               <option value="medium">Medium(300x300)</option>
               <option value="large">Large(450x450)</option>
@@ -68,9 +48,7 @@
           </div>
         </div>
         <div>
-          <base-button mode="outline" @click.prevent="deleteInput(i)">
-            Delete
-          </base-button>
+          <base-button mode="outline" @click.prevent="deleteInput(i)">Delete</base-button>
         </div>
       </base-card>
     </form>
@@ -79,8 +57,10 @@
       @click="saveFormData()"
       to="/forms-list"
       link
-      >Save and go to list</base-button
     >
+
+      <span>{{ isEdit ? 'Update and return to list' : 'Save and go to list' }}</span>
+    </base-button>
   </base-card>
 </template>
 
@@ -88,11 +68,20 @@
 export default {
   data() {
     return {
+      requestedId: this.$route.params.id,
+      isEdit: false,
       formGroup: {
         title: "",
-        inputsData: [],
-      },
+        inputsData: []
+      }
     };
+  },
+  created() {
+    if (this.requestedId) {
+      this.formGroup = JSON.parse(localStorage.getItem("createdFormGroups"));
+      this.isEdit = true;
+      //this.formGroup = this.$store.getters.getFormGroups[this.requestedId];
+    }
   },
   methods: {
     addFormGroup() {
@@ -102,7 +91,7 @@ export default {
         type: "",
         isRequired: true,
         default: "",
-        previewSize: "",
+        previewSize: ""
       };
       this.formGroup.inputsData.push(newFormFields);
     },
@@ -115,14 +104,21 @@ export default {
       this.formGroup.inputsData.splice(index, 1);
     },
     saveFormData() {
-      this.$store.dispatch("saveForm", this.formGroup);
-      localStorage.setItem('createdFormGroups', JSON.stringify(this.formGroup))
-      this.$refs.formGroup.reset();
-
-      // this.formGroup.title = '';
-      // this.formGroup.inputsData = [];
-    },
-  },
+      if (this.requestedId) {
+          const payload = {
+              formGroup: this.formGroup,
+              id: this.requestedId
+          }
+        this.$store.dispatch("updateForm", payload);
+        console.log('inside form template after update click', this.formGroup, this.requestedId);
+       localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
+      } else {
+        this.$store.dispatch("saveForm", this.formGroup);
+       localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
+        this.$refs.formGroup.reset();
+      }
+    }
+  }
 };
 </script>
 
