@@ -118,9 +118,6 @@ export default {
       this.$store.dispatch("saveForm", this.formGroup);
       localStorage.setItem('createdFormGroups', JSON.stringify(this.formGroup))
       this.$refs.formGroup.reset();
-
-      // this.formGroup.title = '';
-      // this.formGroup.inputsData = [];
     },
   },
 };

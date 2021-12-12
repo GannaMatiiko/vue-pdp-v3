@@ -18,7 +18,7 @@
           </div>
           <div>
             <span>Field type*</span>
-            <select v-model="input.type" @change="onTypeChange($event, input)" autocomplete="off">
+            <select v-model="input.type" @change="onTypeChange($event, input)">
               <option value disabled selected>Choose type</option>
               <option value="text">Text</option>
               <option value="textarea">Textarea</option>
@@ -78,9 +78,9 @@ export default {
   },
   created() {
     if (this.requestedId) {
-      this.formGroup = JSON.parse(localStorage.getItem("createdFormGroups"));
+      // this.formGroup = JSON.parse(localStorage.getItem("createdFormGroups"));
       this.isEdit = true;
-      //this.formGroup = this.$store.getters.getFormGroups[this.requestedId];
+      this.formGroup = this.$store.getters.getFormGroups[this.requestedId];
     }
   },
   methods: {
@@ -111,10 +111,10 @@ export default {
           }
         this.$store.dispatch("updateForm", payload);
         console.log('inside form template after update click', this.formGroup, this.requestedId);
-       localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
+      //  localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
       } else {
         this.$store.dispatch("saveForm", this.formGroup);
-       localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
+      //  localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
         this.$refs.formGroup.reset();
       }
     }

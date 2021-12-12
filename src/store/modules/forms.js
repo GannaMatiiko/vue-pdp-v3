@@ -37,17 +37,19 @@ export default {
         addFormData(state, data) {
             let randomId = Math.floor(Date.now() * Math.random());
             state.formGroups[randomId] = data;
+            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
         },
         updateFormData(state, data) {
             let id = data.id;
             console.log('id from mutation', id);
             console.log('state from mutation', state.formGroups);
-        //    let updatedData = data;
 
             state.formGroups[id] = data.formGroup;
+            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
         },
         deleteGroup(state, id) {
             delete state.formGroups[id];
+            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
         }
     },
 }
