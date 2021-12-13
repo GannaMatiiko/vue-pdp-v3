@@ -15,6 +15,9 @@ export default {
         },
         editUrl(context, payload) {
             context.commit('updateUrl', payload);
+        },
+        deleteUrl(context, payload) {
+            context.commit('removeUrl', payload);
         }
     },
     mutations: {
@@ -25,6 +28,9 @@ export default {
         },
         updateUrl(state, payload) {
             state.savedPages[payload].isEdited = true;
+        },
+        removeUrl(state, payload) {
+            delete state.savedPages[payload];
         }
     }
 }
