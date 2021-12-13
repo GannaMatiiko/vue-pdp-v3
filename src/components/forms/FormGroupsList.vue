@@ -6,10 +6,7 @@
     <h3>Created groups</h3>
     <div v-if="createdForms && Object.keys(createdForms).length > 0">
       <div v-for="(form, index) in createdForms" :key="index">
-        <div>
-          <router-link :to="`/fieldgroup-card/${index}`">
-            {{ form.title }} ({{ form.inputsData.length }})
-          </router-link>
+        <div class="group-item">
 
           <router-link :to="`/edit/${index}`">
             <h2>{{ form.title }} ({{ form.inputsData.length }})</h2>
@@ -19,7 +16,10 @@
         </div>
       </div>
     </div>
-    <div v-else>You haven't created any group yet</div>
+    <div v-else>
+      <div class="text">You haven't created any group yet. Let's create a new one!</div>
+      <base-button to="/add" link>Add form group</base-button>
+    </div>
   </base-card>
 </template>
 
@@ -38,3 +38,14 @@ export default {
 };
 </script>
 
+
+<style scoped>
+.text {
+  margin-bottom: 10px;
+}
+.group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>

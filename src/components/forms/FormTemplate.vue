@@ -3,10 +3,18 @@
     <h3>Create your form group</h3>
     <form ref="formGroup">
       <div class="form-title">
-        <input type="text" placeholder="Enter title for form group" v-model="formGroup.title" />
+        <input
+          type="text"
+          placeholder="Enter title for form group"
+          v-model="formGroup.title"
+        />
       </div>
       <base-button @click.prevent="addFormGroup">Add form group</base-button>
-      <base-card v-for="(input, i) in formGroup.inputsData" :key="i" class="form-input-group">
+      <base-card
+        v-for="(input, i) in formGroup.inputsData"
+        :key="i"
+        class="form-input-group"
+      >
         <div>
           <div>
             <span>Field label*</span>
@@ -48,7 +56,9 @@
           </div>
         </div>
         <div>
-          <base-button mode="outline" @click.prevent="deleteInput(i)">Delete</base-button>
+          <base-button mode="outline" @click.prevent="deleteInput(i)"
+            >Delete</base-button
+          >
         </div>
       </base-card>
     </form>
@@ -58,8 +68,9 @@
       to="/forms-list"
       link
     >
-
-      <span>{{ isEdit ? 'Update and return to list' : 'Save and go to list' }}</span>
+      <span>{{
+        isEdit ? "Update and return to list" : "Save and go to list"
+      }}</span>
     </base-button>
   </base-card>
 </template>
@@ -72,13 +83,12 @@ export default {
       isEdit: false,
       formGroup: {
         title: "",
-        inputsData: []
-      }
+        inputsData: [],
+      },
     };
   },
   created() {
     if (this.requestedId) {
-      // this.formGroup = JSON.parse(localStorage.getItem("createdFormGroups"));
       this.isEdit = true;
       this.formGroup = this.$store.getters.getFormGroups[this.requestedId];
     }
@@ -91,7 +101,7 @@ export default {
         type: "",
         isRequired: true,
         default: "",
-        previewSize: ""
+        previewSize: "",
       };
       this.formGroup.inputsData.push(newFormFields);
     },
@@ -105,20 +115,17 @@ export default {
     },
     saveFormData() {
       if (this.requestedId) {
-          const payload = {
-              formGroup: this.formGroup,
-              id: this.requestedId
-          }
+        const payload = {
+          formGroup: this.formGroup,
+          id: this.requestedId,
+        };
         this.$store.dispatch("updateForm", payload);
-        console.log('inside form template after update click', this.formGroup, this.requestedId);
-      //  localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
       } else {
         this.$store.dispatch("saveForm", this.formGroup);
-      //  localStorage.setItem("createdFormGroups", JSON.stringify(this.formGroup));
         this.$refs.formGroup.reset();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
