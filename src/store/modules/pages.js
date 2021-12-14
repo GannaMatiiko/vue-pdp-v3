@@ -1,7 +1,7 @@
 export default {
     state() {
         return {
-           savedPages: {}
+            savedPages: {}
         }
     },
     getters: {
@@ -13,8 +13,11 @@ export default {
         addUrl(context, payload) {
             context.commit('storeNewUrl', payload);
         },
-        editUrl(context, payload) {
-            context.commit('updateUrl', payload);
+        renameUrl(context, payload) {
+            context.commit('renameUrl', payload);
+        },
+        onUrlRenameCompleted(context, payload) {
+            context.commit('onUrlRenameCompleted', payload);
         },
         deleteUrl(context, payload) {
             context.commit('removeUrl', payload);
@@ -22,13 +25,18 @@ export default {
     },
     mutations: {
         storeNewUrl(state, payload) {
-            state.savedPages[payload] = {
-                id: payload,
-                isEdited: false
-            };
+            state.savedPages[payload] = {};
+            console.log(state, payload)
         },
-        updateUrl(state, payload) {
-            state.savedPages[payload].isEdited = true;
+        renameUrl(state, payload) {
+            console.log(state, payload)
+            state.savedPages[payload].isRenaming = true;
+        },
+        onUrlRenameCompleted(state, payload) {
+            delete state.savedPages[payload.oldValue].isRenaming;
+            if (payload.oldValue !== payload.newValue) {
+                delete Object.assign(state.savedPages, { [payload.newValue]: state.savedPages[payload.oldValue] })[payload.oldValue];
+            }
         },
         removeUrl(state, payload) {
             delete state.savedPages[payload];

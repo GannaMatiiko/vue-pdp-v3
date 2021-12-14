@@ -1,24 +1,22 @@
 <template>
-  <Form @submit="onSubmit">
+  <form>
     <div class="form-control">
       <label for="url" v-if="isShown">Enter page alias</label>
-      <Field type="text" id="url" autocomplete="off" name="url" :rules="validateUrl" />
-       <ErrorMessage name="url" />
-      <p v-if="!url.isValid">This input should not be empty</p>
+      <input type="text" id="url" autocomplete="off" v-model="url" />
     </div>
     <!-- <base-button v-if="isShown" @click.prevent="addUrl">Add alias</base-button> -->
-    <base-button v-if="isShown">Add alias</base-button>
-  </Form>
+    <base-button v-if="isShown" @click.prevent="addUrl">Add alias</base-button>
+  </form>
 </template>
 
 <script>
-import { Form, Field, ErrorMessage  } from 'vee-validate';
+// import { Form, Field, ErrorMessage  } from 'vee-validate';
 export default {
-  components: {
-    Form,
-    Field,
-    ErrorMessage 
-  },
+  // components: {
+  //   Form,
+  //   Field,
+  //   ErrorMessage 
+  // },
   props: {
     urlProp: {
       type: String,
@@ -33,10 +31,11 @@ export default {
   data() {
     return {
       isValidForm: true,
-      url: {
-        val: '',
-        isValid: true
-      },
+      url: '',
+      // url: {
+      //   val: '',
+      //   isValid: true
+      // },
     };
   },
   methods: {
@@ -46,13 +45,13 @@ export default {
       }
     },
     addUrl() {
-      this.validateInput();
+      // this.validateInput();
 
-      if(!this.url.isValid) {
-        return;
-      }
+      // if(!this.url.isValid) {
+      //   return;
+      // }
       this.$store.dispatch("addUrl", this.url);
-      this.url.val = '';
+      this.url = '';
     },
     onSubmit(values) {
       console.log(values);

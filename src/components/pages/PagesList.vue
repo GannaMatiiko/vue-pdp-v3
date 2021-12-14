@@ -8,10 +8,13 @@
 
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
       <div v-for="(page, index) in createdPages" :key="index" class="page-list-item">
-        <router-link :to="`/page/${index}`">{{ index }}</router-link>
-        <page-form  :isShown="false" :urlProp="index" v-if="page.isEdited"></page-form>
+        <router-link :to="`/page/${index}`" v-if="!page.isRenaming">{{ index }}</router-link>
+        
+        <!-- <input type="text" v-else :value="index"> -->
+        <input type="text" v-else v-model="renamingAlias">
+        <!-- <page-form  :isShown="false" :urlProp="index" v-if="page.isEdited"></page-form> -->
         <div>
-          <base-button @click="editAlias(index)" v-if="!page.isEdited">
+          <base-button @click="renameAlias(index)" >
             Edit <font-awesome-icon :icon="['fas', 'edit']"/>
           </base-button>
 <!-- 
@@ -19,7 +22,7 @@
             Edit <font-awesome-icon :icon="['fas', 'edit']"/>
           </base-button>
            -->
-          <base-button @click="editAlias" v-if="page.isEdited">
+          <base-button @click="proccessRename(index)" >
             Update <font-awesome-icon :icon="['fas', 'save']" />
           </base-button>
 
@@ -41,7 +44,7 @@ export default {
   },
   data() {
     return {
-      
+      renamingAlias: '',
     }
   },
   computed: {
@@ -50,8 +53,15 @@ export default {
     },
   },
   methods: {
-    editAlias(index) {
-      this.$store.dispatch('editUrl', index);
+    renameAlias(index) {
+      this.renamingAlias = index;
+      this.$store.dispatch('renameUrl', index);
+    },
+    proccessRename(index) {
+      this.$store.dispatch('onUrlRenameCompleted', {
+        oldValue: index,
+        newValue: this.renamingAlias
+      });
     },
     deleteAlias(index) {
       this.$store.dispatch('deleteUrl', index)
