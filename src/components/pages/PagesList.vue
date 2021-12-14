@@ -9,13 +9,17 @@
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
       <div v-for="(page, index) in createdPages" :key="index" class="page-list-item">
         <router-link :to="`/page/${index}`">{{ index }}</router-link>
-        <page-form  :isShown="false" :urlProps="index" v-if="page.isEdited"></page-form>
+        <page-form  :isShown="false" :urlProp="index" v-if="page.isEdited"></page-form>
         <div>
           <base-button @click="editAlias(index)" v-if="!page.isEdited">
             Edit <font-awesome-icon :icon="['fas', 'edit']"/>
           </base-button>
-          
-          <base-button @click="editAlias" v-else-if="page.isEdited">
+<!-- 
+          <base-button link :to="`/page/${index}`">
+            Edit <font-awesome-icon :icon="['fas', 'edit']"/>
+          </base-button>
+           -->
+          <base-button @click="editAlias" v-if="page.isEdited">
             Update <font-awesome-icon :icon="['fas', 'save']" />
           </base-button>
 

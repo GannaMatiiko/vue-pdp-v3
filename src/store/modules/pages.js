@@ -7,7 +7,7 @@ export default {
     getters: {
         getCreatedPages(state) {
             return state.savedPages;
-        }
+        },
     },
     actions: {
         addUrl(context, payload) {
@@ -23,6 +23,7 @@ export default {
     mutations: {
         storeNewUrl(state, payload) {
             state.savedPages[payload] = {
+                id: payload,
                 isEdited: false
             };
         },
