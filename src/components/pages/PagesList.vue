@@ -8,17 +8,16 @@
 
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
       <div v-for="(page, index) in createdPages" :key="index" class="page-list-item">
-        <router-link :to="`/page/${index}`" v-if="!page.isRenaming">{{ index }}</router-link>
+        <router-link :to="`/page/${page.urlName}`" v-if="!page.isRenaming">{{ page.urlName}} index is {{index }}</router-link>
         
-        <!-- <input type="text" v-else :value="index"> -->
         <input type="text" v-else v-model="renamingAlias">
 
         <div>
-          <base-button @click="renameAlias(index)" v-if="!page.isRenaming">
+          <base-button @click="renameAlias(page.id, page.urlName)" v-if="!page.isRenaming">
             Rename <font-awesome-icon :icon="['fas', 'edit']"/>
           </base-button>
 
-          <base-button @click="proccessRename(index)" v-else>
+          <base-button @click="proccessRename(page.id)" v-else>
             Update <font-awesome-icon :icon="['fas', 'save']" />
           </base-button>
 
@@ -49,13 +48,13 @@ export default {
     },
   },
   methods: {
-    renameAlias(index) {
-      this.renamingAlias = index;
-      this.$store.dispatch('renameUrl', index);
+    renameAlias(id, urlName) {
+      this.renamingAlias = urlName;
+      this.$store.dispatch('renameUrl', id);
     },
-    proccessRename(index) {
+    proccessRename(id) {
       this.$store.dispatch('onUrlRenameCompleted', {
-        oldValue: index,
+        id: id,
         newValue: this.renamingAlias
       });
     },

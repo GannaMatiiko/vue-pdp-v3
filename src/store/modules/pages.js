@@ -1,7 +1,7 @@
 export default {
     state() {
         return {
-            savedPages: {}
+            savedPages: []
         }
     },
     getters: {
@@ -25,42 +25,26 @@ export default {
     },
     mutations: {
         storeNewUrl(state, payload) {
-            state.savedPages[payload] = {};
+            state.savedPages.push({
+                id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
+                urlName: payload
+            })
         },
         renameUrl(state, payload) {
             for (let key in state.savedPages) {
                 delete state.savedPages[key].isRenaming;
+                if (state.savedPages[key].id === payload) {
+                    state.savedPages[key].isRenaming = true;
+                }
             }
-            state.savedPages[payload].isRenaming = true;
         },
         onUrlRenameCompleted(state, payload) {
-            delete state.savedPages[payload.oldValue].isRenaming;
-            // if (payload.oldValue !== payload.newValue) {
-            //     delete Object.assign(state.savedPages, { [payload.newValue]: state.savedPages[payload.oldValue] })[payload.oldValue];
-            // }
-
-            if (payload.oldValue !== payload.newValue && state.savedPages[payload.oldValue]) {
-
-                // let keyValues = Object.keys(state.savedPages);
-                // let position = keyValues.indexOf(payload.oldValue);
-                // console.log('desired index', position);
-                // keyValues.splice(position, 1, payload.newValue); 
-
-
-                // console.log('KEY VALUES', keyValues);
-                // let newObj = Object.fromEntries(keyValues);
-                // console.log(newObj);
-
-                Object.defineProperty(state.savedPages, payload.newValue,
-                    Object.getOwnPropertyDescriptor(state.savedPages, payload.oldValue));
-                delete state.savedPages[payload.oldValue];
-
-
-            }
-        
+            let renamedObjectIndex = state.savedPages.findIndex(x => x.id == payload.id);
+            state.savedPages[renamedObjectIndex].urlName = payload.newValue;
+            delete state.savedPages[renamedObjectIndex].isRenaming;
         },
         removeUrl(state, payload) {
-            delete state.savedPages[payload];
+            state.savedPages.splice(payload, 1);
         }
     }
 }
