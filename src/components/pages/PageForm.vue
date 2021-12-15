@@ -10,19 +10,8 @@
 </template>
 
 <script>
-// import { Form, Field, ErrorMessage  } from 'vee-validate';
 export default {
-  // components: {
-  //   Form,
-  //   Field,
-  //   ErrorMessage 
-  // },
   props: {
-    urlProp: {
-      type: String,
-      required: false,
-      default: null
-    },
     isShown: {
       type: Boolean,
       default: true
@@ -32,41 +21,12 @@ export default {
     return {
       isValidForm: true,
       url: '',
-      // url: {
-      //   val: '',
-      //   isValid: true
-      // },
     };
   },
   methods: {
-    validateInput() {
-      if (this.url.val === '') {
-        this.url.isValid = false;
-      }
-    },
     addUrl() {
-      // this.validateInput();
-
-      // if(!this.url.isValid) {
-      //   return;
-      // }
       this.$store.dispatch("addUrl", this.url);
       this.url = '';
-    },
-    onSubmit(values) {
-      console.log(values);
-      this.$store.dispatch("addUrl", values);
-    },
-    validateUrl(value) {
-      this.isValid = true;
-      // if the field is empty
-      if (!value) {
-        return 'This field is required';
-      }
-      // All is good
-      // return true;
-      this.isValidForm = true;
-      
     },
   },
 };

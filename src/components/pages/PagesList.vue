@@ -12,17 +12,13 @@
         
         <!-- <input type="text" v-else :value="index"> -->
         <input type="text" v-else v-model="renamingAlias">
-        <!-- <page-form  :isShown="false" :urlProp="index" v-if="page.isEdited"></page-form> -->
+
         <div>
-          <base-button @click="renameAlias(index)" >
-            Edit <font-awesome-icon :icon="['fas', 'edit']"/>
+          <base-button @click="renameAlias(index)" v-if="!page.isRenaming">
+            Rename <font-awesome-icon :icon="['fas', 'edit']"/>
           </base-button>
-<!-- 
-          <base-button link :to="`/page/${index}`">
-            Edit <font-awesome-icon :icon="['fas', 'edit']"/>
-          </base-button>
-           -->
-          <base-button @click="proccessRename(index)" >
+
+          <base-button @click="proccessRename(index)" v-else>
             Update <font-awesome-icon :icon="['fas', 'save']" />
           </base-button>
 
