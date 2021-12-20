@@ -16,6 +16,11 @@ export default {
     if (createdFormGroups) {
       this.$store.dispatch("loadFormData", createdFormGroups);
     }
+
+    const createdPages = JSON.parse(localStorage.getItem("createdPages"));
+    if (createdPages) {
+      this.$store.dispatch("loadPagesData", createdPages);
+    }
   },
 };
 </script>

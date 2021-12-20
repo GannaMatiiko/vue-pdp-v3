@@ -10,6 +10,9 @@ export default {
         },
     },
     actions: {
+        loadPagesData(context, payload) {
+            context.commit('initPagesData', payload);
+        },
         addUrl(context, payload) {
             context.commit('storeNewUrl', payload);
         },
@@ -24,11 +27,15 @@ export default {
         }
     },
     mutations: {
+        initPagesData(state, payload) {
+            state.savedPages = payload;
+        },
         storeNewUrl(state, payload) {
             state.savedPages.push({
                 id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
                 urlName: payload
-            })
+            });
+            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
         },
         renameUrl(state, payload) {
             for (let key in state.savedPages) {
@@ -40,11 +47,13 @@ export default {
         },
         onUrlRenameCompleted(state, payload) {
             let renamedObjectIndex = state.savedPages.findIndex(x => x.id == payload.id);
-            state.savedPages[renamedObjectIndex].urlName = payload.newValue;
+            state.savedPages[renamedObjectIndex].urlName = payload.newValue.replace(/\s+/g, "-").toLowerCase();
             delete state.savedPages[renamedObjectIndex].isRenaming;
+            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
         },
         removeUrl(state, payload) {
             state.savedPages.splice(payload, 1);
+            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
         }
     }
 }

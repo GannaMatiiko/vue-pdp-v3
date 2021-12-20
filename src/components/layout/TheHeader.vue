@@ -1,11 +1,11 @@
 <template>
   <header>
     <nav class="nav-links">
-      <router-link to="/">Home</router-link>
-      <router-link to="/pages-list">Pages</router-link>
+      <router-link to="/"><font-awesome-icon :icon="['fas', 'home']" /> Home</router-link>
+      <router-link to="/pages-list"><font-awesome-icon :icon="['fas', 'copy']" /> Pages</router-link>
       <div>
-        <router-link to="/forms-list">Created groups</router-link>
-        <router-link to="/add">Add form group</router-link>
+        <router-link to="/forms-list"><font-awesome-icon :icon="['fas', 'layer-group']" /> Created groups</router-link>
+        <router-link to="/add"><font-awesome-icon :icon="['fas', 'plus']" /> Add form group </router-link>
       </div>
     </nav>
   </header>

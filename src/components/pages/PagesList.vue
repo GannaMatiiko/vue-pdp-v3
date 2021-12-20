@@ -1,4 +1,8 @@
 <template>
+Created pages
+<pre>
+  {{createdPages}}
+</pre>
   <base-card>
     <page-form></page-form>
   </base-card>
@@ -8,7 +12,7 @@
 
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
       <div v-for="(page, index) in createdPages" :key="index" class="page-list-item">
-        <router-link :to="`/page/${page.urlName}`" v-if="!page.isRenaming">{{ page.urlName}} index is {{index }}</router-link>
+        <router-link :to="`/page/${page.urlName}`" v-if="!page.isRenaming">{{ page.urlName}}</router-link>
         
         <input type="text" v-else v-model="renamingAlias">
 
