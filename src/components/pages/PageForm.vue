@@ -26,12 +26,12 @@ export default {
   },
   methods: {
     addUrl() {
+      this.url = this.url.replace(/\s+/g, "-").toLowerCase();
       // check for Latin letters
-      let pattern = /^[A-Za-z0-9]+$/;
+      let pattern = /[A-z\u00C0-\u00ff]+/g;
       if (pattern.test(this.url)) {
         console.log(" latin");
         this.isLatin = true;
-        this.url = this.url.replace(/\s+/g, "-").toLowerCase();
         this.$store.dispatch("addUrl", this.url);
         this.url = "";
       } else {
