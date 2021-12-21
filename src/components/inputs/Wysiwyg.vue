@@ -1,9 +1,11 @@
 <template>
   <quill-editor
     :options="options"
-    v-model="editorContent"
+    v-model:content="editorContent" contentType="html"
   ></quill-editor>
-  {{editorContent}}
+
+<div class="content ql-editor" v-html="editorContent"></div>
+
 </template>
 
 <script>
