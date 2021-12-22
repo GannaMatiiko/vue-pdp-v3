@@ -68,7 +68,12 @@ export default {
     addToChosen(event, index) {
       if (event.target.checked) {
         this.chosenIds.push(index);
-        this.$store.dispatch('assignFormValueToPage', this.createdForms[index])
+        const data = {
+          index: index,
+          chosenForm: this.createdForms[index],
+          pageName: this.pageName
+        }
+        this.$store.dispatch('assignFormValueToPage', data)
       } else {
         let indexToRemove = this.chosenIds.indexOf(index);
         this.chosenIds.splice(indexToRemove, 1);

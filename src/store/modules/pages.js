@@ -34,10 +34,13 @@ export default {
             state.savedPages = payload;
         },
         assignFormValueToPage(state, payload) {
-            console.log('PAGE DATA', payload);
-            // state.savedPages.forEach(obj => {
-            //     console.log(obj)
-            // })
+            console.log('PAGE DATA', payload.index, payload.chosenForm, payload.pageName);
+            state.savedPages.forEach(obj => {
+                if (obj.urlName === payload.pageName) {
+                    console.log('Найдено совпадение', obj.urlName);
+                    obj.assignedFormValues.push(payload.chosenForm);
+                }
+            });
         },
         storeNewUrl(state, payload) {
             state.savedPages.push({
