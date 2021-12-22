@@ -24,16 +24,26 @@ export default {
         },
         deleteUrl(context, payload) {
             context.commit('removeUrl', payload);
+        },
+        assignFormValueToPage(context, payload) {
+            context.commit('assignFormValueToPage', payload);
         }
     },
     mutations: {
         initPagesData(state, payload) {
             state.savedPages = payload;
         },
+        assignFormValueToPage(state, payload) {
+            console.log('PAGE DATA', payload);
+            // state.savedPages.forEach(obj => {
+            //     console.log(obj)
+            // })
+        },
         storeNewUrl(state, payload) {
             state.savedPages.push({
                 id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
-                urlName: payload
+                urlName: payload,
+                assignedFormValues: []
             });
             localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
         },

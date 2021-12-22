@@ -12,10 +12,10 @@
       <div v-for="groupData in group.inputsData" :key="groupData">
         !!{{groupData.type}}!!
         <div v-if="groupData.type === 'text'">
-          <Text :groupData="groupData"></Text>
+          <Text :groupData="groupData" :pageName="pageName"></Text>
         </div>
         <div v-if="groupData.type === 'textarea'">
-          <Textarea :groupData="groupData"></Textarea>
+          <Textarea :groupData="groupData" :pageName="pageName"></Textarea>
         </div>
         <div v-if="groupData.type === 'image'">
           <Image :groupData="groupData"></Image>
@@ -68,6 +68,7 @@ export default {
     addToChosen(event, index) {
       if (event.target.checked) {
         this.chosenIds.push(index);
+        this.$store.dispatch('assignFormValueToPage', this.createdForms[index])
       } else {
         let indexToRemove = this.chosenIds.indexOf(index);
         this.chosenIds.splice(indexToRemove, 1);
