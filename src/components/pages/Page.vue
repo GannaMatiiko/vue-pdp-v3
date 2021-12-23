@@ -10,21 +10,22 @@
   <base-card v-if="chosenIds && chosenIds.length > 0">
     <div v-for="group in chosenGroups" :key="group">
       <div v-for="groupData in group.inputsData" :key="groupData">
-        !!{{groupData.type}}!!
+        Input type <strong> {{groupData.type}}</strong>
         <div v-if="groupData.type === 'text'">
-          <Text :groupData="groupData" :pageName="pageName"></Text>
+          <Text :groupData="groupData" :pageName="pageName" @initInputChanges="onInitInputChanges"></Text>
         </div>
         <div v-if="groupData.type === 'textarea'">
-          <Textarea :groupData="groupData" :pageName="pageName"></Textarea>
+          <Textarea :groupData="groupData" :pageName="pageName" @initInputChanges="onInitInputChanges"></Textarea>
         </div>
         <div v-if="groupData.type === 'image'">
-          <Image :groupData="groupData"></Image>
+          <Image :groupData="groupData" @initInputChanges="onInitInputChanges"></Image>
         </div>
         <div v-if="groupData.type === 'wysiwyg'">
-          <Wysiwyg></Wysiwyg>
+          <Wysiwyg @initInputChanges="onInitInputChanges"></Wysiwyg>
         </div>
       </div>
     </div>
+    <base-button @click="saveAssignedFormsToPage">Save</base-button>
   </base-card>
 
   <pre>{{ createdForms }}</pre>
@@ -47,7 +48,8 @@ export default {
   data() {
     return {
       pageName: this.$route.params.url,
-      chosenIds: []
+      chosenIds: [],
+      savedValues: []
     };
   },
   computed: {
@@ -68,16 +70,21 @@ export default {
     addToChosen(event, index) {
       if (event.target.checked) {
         this.chosenIds.push(index);
-        const data = {
-          index: index,
-          chosenForm: this.createdForms[index],
-          pageName: this.pageName
-        }
-        this.$store.dispatch('assignFormValueToPage', data)
+        this.$store.dispatch('assignFormValueToPage', this.pageName);
       } else {
         let indexToRemove = this.chosenIds.indexOf(index);
         this.chosenIds.splice(indexToRemove, 1);
       }
+    },
+    onInitInputChanges(value) {
+      console.log('value inside parent', value);
+      this.savedValues.push(value);
+    },
+    saveAssignedFormsToPage() {
+      // const pageData = {
+
+      // }
+      console.log('сохраненные значения', this.savedValues)
     }
   }
 };

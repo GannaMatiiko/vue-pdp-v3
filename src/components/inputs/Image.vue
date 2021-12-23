@@ -20,6 +20,8 @@ export default {
       const file = e.target.files[0];
       this.image = file;
       this.item.imageUrl = URL.createObjectURL(file);
+
+      this.$emit('initInputChanges', this.item.imageUrl);
     },
   },
 };

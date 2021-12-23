@@ -39,6 +39,11 @@ body {
 .form-control {
   margin: 0.5rem 0;
 }
+.input-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 label {
   font-weight: bold;

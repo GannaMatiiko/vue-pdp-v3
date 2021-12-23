@@ -1,7 +1,7 @@
 <template>
   <quill-editor
     :options="options"
-    v-model:content="editorContent" contentType="html"
+    v-model:content="editorContent" contentType="html" @focus="changeInputValue()" 
   ></quill-editor>
 
 <div class="content ql-editor" v-html="editorContent"></div>
@@ -24,5 +24,12 @@ export default {
       editorContent: "",
     };
   },
+  methods: {
+    changeInputValue() {
+      console.log('CHANGED!', this.editorContent)
+
+      this.$emit('initInputChanges', this.editorContent);
+    }
+  }
 };
 </script>
