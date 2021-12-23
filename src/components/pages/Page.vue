@@ -8,14 +8,15 @@
   </base-card>
 
   <base-card v-if="chosenIds && chosenIds.length > 0">
-    <div v-for="group in chosenGroups" :key="group">
-      <div v-for="groupData in group.inputsData" :key="groupData">
+    <div v-for="(group,i) in chosenGroups" :key="group">
+      {{i}} h 
+      <div v-for="(groupData,j) in group.inputsData" :key="groupData">
         Input type <strong> {{groupData.type}}</strong>
         <div v-if="groupData.type === 'text'">
-          <Text :groupData="groupData" :pageName="pageName" @initInputChanges="onInitInputChanges"></Text>
+          <Text :groupData="groupData" :groupId="this.chosenIds[i]" :groupPosition="j" @initInputChanges="onInitInputChanges"></Text>
         </div>
         <div v-if="groupData.type === 'textarea'">
-          <Textarea :groupData="groupData" :pageName="pageName" @initInputChanges="onInitInputChanges"></Textarea>
+          <Textarea :groupData="groupData" @initInputChanges="onInitInputChanges"></Textarea>
         </div>
         <div v-if="groupData.type === 'image'">
           <Image :groupData="groupData" @initInputChanges="onInitInputChanges"></Image>
@@ -49,7 +50,12 @@ export default {
     return {
       pageName: this.$route.params.url,
       chosenIds: [],
-      savedValues: []
+      savedValues: [],
+      obj: {
+        // groupId:[
+
+        // ]
+      },
     };
   },
   computed: {
@@ -74,17 +80,45 @@ export default {
       } else {
         let indexToRemove = this.chosenIds.indexOf(index);
         this.chosenIds.splice(indexToRemove, 1);
+        delete this.obj[index];
       }
     },
-    onInitInputChanges(value) {
-      console.log('value inside parent', value);
-      this.savedValues.push(value);
+    onInitInputChanges(value, groupId, groupPosition) {
+      console.log('value inside parent', value, groupId, groupPosition);
+      //this.savedValues.push(value);
+  console.log( this.obj, 'DOOO' )    
+
+    console.log(Object.prototype.hasOwnProperty.call(this.obj, groupId),  'has own prop')
+
+
+      if (!Object.prototype.hasOwnProperty.call(this.obj, groupId)) {
+        this.obj[groupId] = {
+          [groupPosition]: value
+        }
+      } else {
+        this.obj[groupId][groupPosition] = value;
+      }
+
+      
+
+console.log( Object.keys(this.obj[groupId]).length )
+
+     // if (this.obj[groupId])
+      //this.obj[groupId][groupPosition] = value;
+
+      //console.log(this.obj, this.obj[groupId], 'THIS OBJ')
+
+      console.log(this.obj, 'OBJJJJJJJJ')
     },
     saveAssignedFormsToPage() {
       // const pageData = {
 
       // }
-      console.log('сохраненные значения', this.savedValues)
+      //console.log('сохраненные значения', this.savedValues)
+
+
+
+      console.log('BEFORE SAVE', this.obj)
     }
   }
 };

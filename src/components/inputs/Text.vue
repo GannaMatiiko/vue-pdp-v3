@@ -14,43 +14,30 @@
 
   <pre>{{ this.defaultValue }}</pre>
 
+  <h1>{{ this.groupId }} - {{ groupPosition }}</h1>
+
 </template>
 
 <script>
 export default {
-  props: ["groupData", "pageName"],
+  props: ["groupData", "groupId", "groupPosition"],
   data() {
     return {
       label: this.groupData.label,
       name: this.groupData.name,
       isRequired: this.groupData.isRequired,
       defaultValue: this.groupData.default,
-      oldValue: this.groupData.default,
     };
   },
   methods: {
       changeInputValue() {
           
-          this.oldValue = this.defaultValue;
-          console.log("а что в олд велью?", this.oldValue);
-          // const pageData = {
-
-          //     pageName: this.pageName,
-          //     value: this.defaultValue
-          // }
-          this.$emit('initInputChanges', this.defaultValue);
+          this.$emit('initInputChanges', this.defaultValue, this.groupId, this.groupPosition);
           // this.$store.dispatch('assignFormValueToPage', pageData);
       }
   },
-  watch: {
-    defaultValue() {
-      console.log('OHH, VALUE CHANGED');
-
-    }
-  },
   created() {
-    this.oldValue = this.defaultValue;
-    this.$emit('initInputChanges', this.oldValue);
+    this.$emit('initInputChanges', this.groupId, this.groupPosition);
   }
 };
 </script>
