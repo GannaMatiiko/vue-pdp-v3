@@ -1,6 +1,6 @@
 <template>
   <div class="input-type">
-    <label :for="name">Label is  {{ label }}</label>
+    <label :for="name">Label is {{ label }}</label>
     <textarea
       :id="name"
       :name="name"
@@ -15,11 +15,13 @@
   </div>
 
   <pre>{{ groupData }}</pre>
+
+  <h1>{{ this.groupId }} - {{ groupPosition }}</h1>
 </template>
 
 <script>
 export default {
-  props: ["groupData", "pageName"],
+  props: ["groupData", "groupId", "groupPosition"],
   data() {
     return {
       label: this.groupData.label,
@@ -29,10 +31,22 @@ export default {
     };
   },
   methods: {
-      changeInputValue(data) {
-        console.log(data);
-          this.$emit('initInputChanges', this.defaultValue);
-      }
-  }
+    changeInputValue() {
+      this.$emit(
+        "initInputChanges",
+        this.defaultValue,
+        this.groupId,
+        this.groupPosition
+      );
+    },
+  },
+  created() {
+    this.$emit(
+      "initInputChanges",
+      this.defaultValue,
+      this.groupId,
+      this.groupPosition
+    );
+  },
 };
 </script>

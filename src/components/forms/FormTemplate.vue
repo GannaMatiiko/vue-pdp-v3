@@ -41,7 +41,7 @@
             <input type="radio" value="true" v-model="input.isRequired" />
             <input type="radio" value="false" v-model="input.isRequired" />
           </div>
-          <div>
+          <div v-if="input.type !== 'image'">
             <span>Default value</span>
             <input type="text" v-model="input.default" />
           </div>

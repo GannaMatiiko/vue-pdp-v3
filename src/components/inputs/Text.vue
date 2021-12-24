@@ -15,7 +15,6 @@
   <pre>{{ this.defaultValue }}</pre>
 
   <h1>{{ this.groupId }} - {{ groupPosition }}</h1>
-
 </template>
 
 <script>
@@ -30,14 +29,22 @@ export default {
     };
   },
   methods: {
-      changeInputValue() {
-          
-          this.$emit('initInputChanges', this.defaultValue, this.groupId, this.groupPosition);
-          // this.$store.dispatch('assignFormValueToPage', pageData);
-      }
+    changeInputValue() {
+      this.$emit(
+        "initInputChanges",
+        this.defaultValue,
+        this.groupId,
+        this.groupPosition
+      );
+    },
   },
   created() {
-    this.$emit('initInputChanges', this.groupId, this.groupPosition);
-  }
+    this.$emit(
+      "initInputChanges",
+      this.defaultValue,
+      this.groupId,
+      this.groupPosition
+    );
+  },
 };
 </script>

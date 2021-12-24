@@ -35,12 +35,12 @@ export default {
         },
         assignFormValueToPage(state, payload) {
             console.log('PAGE DATA', payload);
-            state.savedPages.forEach(obj => {
-                if (obj.urlName === payload) {
-                    console.log('Найдено совпадение', obj.urlName);
-                    obj.assignedFormValues.push(payload);
-                }
-            });
+            // state.savedPages.forEach(obj => {
+            //     if (obj.urlName === payload) {
+            //         console.log('Найдено совпадение', obj.urlName);
+            //         obj.assignedFormValues.push(payload);
+            //     }
+            // });
         },
         storeNewUrl(state, payload) {
             state.savedPages.push({
