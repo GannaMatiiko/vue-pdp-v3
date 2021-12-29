@@ -43,7 +43,7 @@ export default {
   created() {
     this.$emit(
       "initInputChanges",
-      { link: this.item.imageUrl, imageSize: this.imageSize },
+      { type: 'image', link: this.item.imageUrl, imageSize: this.imageSize },
       this.groupId,
       this.groupPosition
     );

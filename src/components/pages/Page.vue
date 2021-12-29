@@ -127,6 +127,11 @@ export default {
     },
     saveAssignedFormsToPage() {
       console.log("BEFORE SAVE", this.assignedFormValues);
+      const pageData = {
+        pageName: this.pageName,
+        assignedFormValues: this.assignedFormValues
+      }
+      this.$store.dispatch('assignFormValueToPage', pageData);
     },
   },
 };

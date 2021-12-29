@@ -32,7 +32,7 @@ export default {
     changeInputValue() {
       this.$emit(
         "initInputChanges",
-        this.defaultValue,
+        { type: 'text', value: this.defaultValue },
         this.groupId,
         this.groupPosition
       );
@@ -41,7 +41,7 @@ export default {
   created() {
     this.$emit(
       "initInputChanges",
-      this.defaultValue,
+      { type: 'text', value: this.defaultValue },
       this.groupId,
       this.groupPosition
     );

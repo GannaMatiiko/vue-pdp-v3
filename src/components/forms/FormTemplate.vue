@@ -76,7 +76,12 @@
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 export default {
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
       requestedId: this.$route.params.id,
@@ -84,6 +89,13 @@ export default {
       formGroup: {
         title: "",
         inputsData: [],
+      },
+    };
+  },
+  validations() {
+    return {
+      formGroup: {
+        title: { required },
       },
     };
   },
@@ -114,6 +126,15 @@ export default {
       this.formGroup.inputsData.splice(index, 1);
     },
     saveFormData() {
+      alert("!!!");
+      this.v$.$touch();
+      // stop here if form is invalid
+      if (this.$v.$invalid){
+        alert('not valid')
+      } else {
+        alert('valid')
+      }
+
       if (this.requestedId) {
         const payload = {
           formGroup: this.formGroup,
