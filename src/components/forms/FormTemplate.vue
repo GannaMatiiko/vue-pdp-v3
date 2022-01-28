@@ -1,15 +1,19 @@
 <template>
   <base-card>
     <h3>Create your form group</h3>
-    <form ref="formGroup">
+    <Form ref="formGroup" @submit="saveFormData">
       <div class="form-title">
-        <input
+        <Field
           type="text"
+          name="formGroupName"
+          :rules="validateFormGroupName"
           placeholder="Enter title for form group"
           v-model="formGroup.title"
         />
+        <br>
+        <ErrorMessage name="formGroupName" />
       </div>
-      <base-button @click.prevent="addFormGroup">Add form group</base-button>
+      <div class="base-button" @click="addFormGroup">Add form group</div>
       <base-card
         v-for="(input, i) in formGroup.inputsData"
         :key="i"
@@ -61,26 +65,24 @@
           >
         </div>
       </base-card>
-    </form>
-    <base-button
-      v-if="formGroup.inputsData.length > 0"
-      @click="saveFormData()"
-      to="/forms-list"
-      link
-    >
-      <span>{{
-        isEdit ? "Update and return to list" : "Save and go to list"
-      }}</span>
-    </base-button>
+      <base-button
+        v-if="formGroup.inputsData.length > 0"
+      >
+        <span>{{
+          isEdit ? "Update and return to list" : "Save and go to list"
+        }}</span>
+      </base-button>
+    </Form>
   </base-card>
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { Form, Field, ErrorMessage } from 'vee-validate';
 export default {
-  setup() {
-    return { v$: useVuelidate() };
+  components: {
+    Form,
+    Field,
+    ErrorMessage
   },
   data() {
     return {
@@ -89,13 +91,6 @@ export default {
       formGroup: {
         title: "",
         inputsData: [],
-      },
-    };
-  },
-  validations() {
-    return {
-      formGroup: {
-        title: { required },
       },
     };
   },
@@ -125,15 +120,8 @@ export default {
     deleteInput(index) {
       this.formGroup.inputsData.splice(index, 1);
     },
-    saveFormData() {
-      alert("!!!");
-      this.v$.$touch();
-      // stop here if form is invalid
-      if (this.$v.$invalid){
-        alert('not valid')
-      } else {
-        alert('valid')
-      }
+    saveFormData(values) {
+      console.log('values', values);
 
       if (this.requestedId) {
         const payload = {
@@ -143,8 +131,19 @@ export default {
         this.$store.dispatch("updateForm", payload);
       } else {
         this.$store.dispatch("saveForm", this.formGroup);
-        this.$refs.formGroup.reset();
+      this.$router.push('/forms-list');
+        //this.$refs.formGroup.reset();
       }
+    },
+     validateFormGroupName(value) {
+      // if the field is empty
+      if (!value) {
+        console.log('This field is required');
+        return 'This field is required';
+      }
+      // All is good
+      console.log('all is good');
+      return true;
     },
   },
 };
@@ -159,5 +158,23 @@ export default {
   justify-content: space-around;
   align-items: center;
   margin-bottom: 30px;
+}
+.base-button {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  max-height: 50px;
+  font: inherit;
+  background-color: #3a0061;
+  border: 1px solid #3a0061;
+  color: white;
+  cursor: pointer;
+  border-radius: 30px;
+  margin-right: 0.5rem;
+  display: inline-block;
+}
+.base-button:hover,
+.base-button:active {
+  background-color: #270041;
+  border-color: #270041;
 }
 </style>

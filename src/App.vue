@@ -33,8 +33,8 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(55, 57, 59);
-  color: #fff;
+  /* background: rgb(55, 57, 59); */
+  /* color: #fff; */
 }
 .form-control {
   margin: 0.5rem 0;
@@ -87,5 +87,17 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:focus {
   outline: #3d008d solid 1px;
+}
+
+.error-wrapper {
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  left: 0;
+}
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 </style>

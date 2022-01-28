@@ -85,17 +85,7 @@ label {
   display: block;
   margin-bottom: 0.5rem;
 }
-.error-wrapper {
-  position: absolute;
-  bottom: -10px;
-  right: 0;
-  left: 0;
-}
-.error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
+
 p {
   margin: 0;
 }
