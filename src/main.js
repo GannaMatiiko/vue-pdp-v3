@@ -10,6 +10,15 @@ import { faPhone, faEdit, faSave, faTrash, faPlus, faLayerGroup, faCopy, faHome 
 import BaseButton from './components/ui/BaseButton.vue';
 import BaseCard from './components/ui/BaseCard.vue';
 
+import { defineRule } from 'vee-validate';
+
+defineRule('required', value => {
+    if (!value || !value.length) {
+        return 'This field is required';
+    }
+    return true;
+});
+
 const app = createApp(App);
 app.use(router);
 app.use(store);

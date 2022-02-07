@@ -3,15 +3,15 @@
     <h3>Create your form group</h3>
     <Form ref="formGroup" @submit="saveFormData">
       <div class="form-title">
+        <div class="formgroup-title">Enter form group title<span class="required">*</span></div>
         <Field
           type="text"
           name="formGroupName"
-          :rules="validateFormGroupName"
-          placeholder="Enter title for form group"
+          rules="required"
           v-model="formGroup.title"
         />
         <br>
-        <ErrorMessage name="formGroupName" />
+        <ErrorMessage name="formGroupName" class="error formgroup-error" />
       </div>
       <div class="base-button" @click="addFormGroup">Add form group</div>
       <base-card
@@ -19,18 +19,20 @@
         :key="i"
         class="form-input-group"
       >
-        <div>
+        <div class="form-input-group-inner">
           <div>
-            <span>Field label*</span>
-            <input type="text" v-model="input.label" />
+            <span class="field-descr">Field label<span class="required">*</span></span>
+            <Field type="text" name="fieldLabel" v-model="input.label" rules="required"/>
+            <ErrorMessage name="fieldLabel" class="error field-error" />
           </div>
           <div>
-            <span>Field name*</span>
-            <input type="text" v-model="input.name" />
+            <span class="field-descr">Field name<span class="required">*</span></span>
+            <Field type="text" name="fieldName" v-model="input.name" rules="required"/>
+            <ErrorMessage name="fieldName" class="error field-error" />
           </div>
           <div>
-            <span>Field type*</span>
-            <select v-model="input.type" @change="onTypeChange($event, input)">
+            <span class="field-descr">Field type<span class="required">*</span></span>
+            <Field name="fieldType" as="select" v-model="input.type" @change="onTypeChange($event, input)" rules="required">
               <option value disabled selected>Choose type</option>
               <option value="text">Text</option>
               <option value="textarea">Textarea</option>
@@ -38,25 +40,27 @@
               <option value="wysiwyg">WYSIWYG</option>
               <option value="group">Group</option>
               <option value="repeater">Repeater</option>
-            </select>
+            </Field>
+            <ErrorMessage name="fieldType" class="error field-error" />
           </div>
           <div>
-            <span>Required?</span>
+            <span class="field-descr">Required?</span>
             <input type="radio" value="true" v-model="input.isRequired" />
             <input type="radio" value="false" v-model="input.isRequired" />
           </div>
           <div v-if="input.type !== 'image'">
-            <span>Default value</span>
+            <span class="field-descr">Default value</span>
             <input type="text" v-model="input.default" />
           </div>
           <div v-if="input.type === 'image'">
-            <span>Preview size</span>
-            <select v-model="input.previewSize">
+            <span class="field-descr">Preview size<span class="required">*</span></span>
+            <Field name="previewSize" as="select" v-model="input.previewSize" rules="required">
               <option value disabled selected>Choose image size</option>
               <option value="small">Small(150x150)</option>
               <option value="medium">Medium(300x300)</option>
               <option value="large">Large(450x450)</option>
-            </select>
+            </Field>
+            <ErrorMessage name="previewSize" class="error field-error" />
           </div>
         </div>
         <div>
@@ -131,33 +135,29 @@ export default {
         this.$store.dispatch("updateForm", payload);
       } else {
         this.$store.dispatch("saveForm", this.formGroup);
+      }
       this.$router.push('/forms-list');
-        //this.$refs.formGroup.reset();
-      }
-    },
-     validateFormGroupName(value) {
-      // if the field is empty
-      if (!value) {
-        console.log('This field is required');
-        return 'This field is required';
-      }
-      // All is good
-      console.log('all is good');
-      return true;
     },
   },
 };
 </script>
 
 <style scoped>
-.form-title {
-  margin-bottom: 20px;
+.formgroup-title {
+  margin-bottom: 10px;
 }
 .form-input-group {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+}
+.form-input-group-inner {
+  text-align: left;
+}
+.field-descr {
+  display: inline-block;
+  width: 105px;
 }
 .base-button {
   text-decoration: none;
@@ -176,5 +176,8 @@ export default {
 .base-button:active {
   background-color: #270041;
   border-color: #270041;
+}
+span.field-error {
+  margin-left: 10px;
 }
 </style>

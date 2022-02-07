@@ -36,9 +36,6 @@ body {
   /* background: rgb(55, 57, 59); */
   /* color: #fff; */
 }
-.form-control {
-  margin: 0.5rem 0;
-}
 .input-type {
   display: flex;
   align-items: center;
@@ -88,16 +85,20 @@ input[type="checkbox"] {
 input[type="checkbox"]:focus {
   outline: #3d008d solid 1px;
 }
-
-.error-wrapper {
+span.error {
+  color: red;
+}
+.required {
+  color: red;
+}
+.form-title {
+  margin-bottom: 20px;
+  position: relative;
+}
+span.formgroup-error {
   position: absolute;
-  bottom: -10px;
+  bottom: -15px;
   right: 0;
   left: 0;
-}
-.error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 5px;
 }
 </style>

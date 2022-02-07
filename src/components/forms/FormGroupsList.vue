@@ -1,7 +1,4 @@
 <template>
-  created groups
-  <pre>{{ createdForms }}</pre>
-
   <base-card>
     <h3>Created groups</h3>
     <div v-if="createdForms && Object.keys(createdForms).length > 0">
@@ -24,6 +21,9 @@
       <base-button to="/add" link>Add form group</base-button>
     </div>
   </base-card>
+
+    created groups
+  <pre>{{ createdForms }}</pre>
 </template>
 
 <script>
