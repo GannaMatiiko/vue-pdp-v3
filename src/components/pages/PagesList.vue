@@ -16,8 +16,10 @@
           page.urlName
         }}</router-link>
 
-        <input type="text" v-else v-model="renamingAlias" />
-
+        <input type="text" v-else v-model.trim="renamingAlias" />
+        <br>
+        <span class="error error-label" v-if="page.hasError === 'empty'">Field shouldn't be empty</span>
+        <span class="error error-label" v-if="page.hasError === 'notLatin'">Field should contain only Latin characters and numbers</span>
         <div>
           <base-button
             @click="renameAlias(page.id, page.urlName)"
@@ -68,9 +70,19 @@ export default {
       this.$store.dispatch("renameUrl", id);
     },
     proccessRename(id) {
+      let inputHasError = null;
+      if (this.renamingAlias === '') {
+        inputHasError = 'emptyInput';
+      } else if (!/^[\w\s]+$/g.test(this.renamingAlias)) {
+        inputHasError = 'notLatin'
+      }
+       else {
+        inputHasError = false;
+      }
       this.$store.dispatch("onUrlRenameCompleted", {
         id: id,
         newValue: this.renamingAlias,
+        error: inputHasError
       });
     },
     deleteAlias(index) {
@@ -82,6 +94,7 @@ export default {
 
 <style scoped>
 .page-list-item {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -89,5 +102,9 @@ export default {
 }
 .page-list-item:last-child {
   margin-bottom: 0;
+}
+.error-label {
+  position: absolute;
+  bottom: -20px;
 }
 </style>

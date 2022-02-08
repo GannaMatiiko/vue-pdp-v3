@@ -1,19 +1,22 @@
 <template>
-    <Form @submit="addUrl" :validation-schema="schema">
-      <div class="form-control">
-        <label for="url" v-if="isShown">Enter page alias</label>
-        <!-- <p v-if="!isLatin" class="error">Use only Latin letters!</p> -->
-        <Field
-          type="text"
-          name="pageAlias"
-          id="url"
-          autocomplete="off"
-          v-model.trim="url"
-        />
-        <ErrorMessage name="pageAlias"></ErrorMessage>
-      </div>
-      <base-button v-if="isShown">Add alias</base-button>
-    </Form>
+  <Form @submit="addUrl" :validation-schema="schema">
+    <div class="form-title">
+      <label for="url" v-if="isShown">Enter page alias</label>
+      <Field
+        type="text"
+        name="pageAlias"
+        id="url"
+        autocomplete="off"
+        v-model.trim="url"
+      />
+      <ErrorMessage
+        name="pageAlias"
+        class="formgroup-error error"
+      ></ErrorMessage>
+      <span v-if="isPageNameExist" class="formgroup-error error">Page with this name already exist!</span>
+    </div>
+    <base-button v-if="isShown">Add alias</base-button>
+  </Form>
 </template>
 
 <script>
@@ -33,40 +36,31 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      pageAlias: yup.string().required('This field is required and must contain only Latin characters'),
+      pageAlias: yup
+        .string()
+        .required("This field is required")
+        .matches(/^[\w\s]+$/g, "Use only Latin letters and numbers!"),
     });
     return {
       schema,
+      isPageNameExist: false
     };
   },
   methods: {
-    addUrl(values, {resetForm}) {
+    addUrl(values, { resetForm }) {
       this.url = this.url.replace(/\s+/g, "-").toLowerCase();
-      // check for Latin letters
-      let pattern = /^[\w\s]+$/g;
-      if (pattern.test(this.url)) {
-        this.isLatin = true;
-        this.$store.dispatch("addUrl", this.url);
-        resetForm();
-        // this.url = " ";
-        // this.isValidForm = true;
-      } else {
-        this.isLatin = false;
+      let allPages = this.$store.getters.getCreatedPages;
+      console.log('allPages', allPages);
+      for (let page in allPages) {
+        if (allPages[page].urlName === this.url) {
+          alert('ALREADY EXIST!');
+          this.isPageNameExist = true;
+        } else {
+          this.isPageNameExist = false;
+        }
       }
-    },
-    latin(value) {
-      // if the field is empty
-      value = value.replace(/\s+/g, "-").toLowerCase();
-      if (!value) {
-        return "This field is required";
-      }
-      // if the field is not a valid email
-      const regex = /^[\w\s]+$/g;
-      if (!regex.test(value)) {
-        return "This field must contain only Latin letters";
-      }
-      // All is good
-      return true;
+      this.$store.dispatch("addUrl", this.url);
+      resetForm();
     },
   },
 };

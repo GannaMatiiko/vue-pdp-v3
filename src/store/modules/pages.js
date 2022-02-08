@@ -61,8 +61,25 @@ export default {
         onUrlRenameCompleted(state, payload) {
             let renamedObjectIndex = state.savedPages.findIndex(x => x.id == payload.id);
             state.savedPages[renamedObjectIndex].urlName = payload.newValue.replace(/\s+/g, "-").toLowerCase();
-            delete state.savedPages[renamedObjectIndex].isRenaming;
-            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
+
+            for (let key in state.savedPages) {
+                delete state.savedPages[key].hasError;
+                if (state.savedPages[key].id === payload.id) {
+                    if (payload.error == 'emptyInput') {
+                        state.savedPages[key].hasError = 'empty';
+                        return;
+                    } else if (payload.error == 'notLatin') {
+                        state.savedPages[key].hasError = 'notLatin';
+                        return;
+                    }
+                    else {
+                        state.savedPages[key].hasError = false;
+                        delete state.savedPages[renamedObjectIndex].isRenaming;
+                        localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
+                    }
+                }
+            }
+            
         },
         removeUrl(state, payload) {
             state.savedPages.splice(payload, 1);
