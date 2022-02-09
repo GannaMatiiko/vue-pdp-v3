@@ -13,7 +13,8 @@
         name="pageAlias"
         class="formgroup-error error"
       ></ErrorMessage>
-      <span v-if="isPageNameExist" class="formgroup-error error">Page with this name already exist!</span>
+      <br>
+      <span v-if="isPageNameExist" class="error custom-error">Page with this name already exist!</span>
     </div>
     <base-button v-if="isShown">Add alias</base-button>
   </Form>
@@ -50,11 +51,10 @@ export default {
     addUrl(values, { resetForm }) {
       this.url = this.url.replace(/\s+/g, "-").toLowerCase();
       let allPages = this.$store.getters.getCreatedPages;
-      console.log('allPages', allPages);
       for (let page in allPages) {
         if (allPages[page].urlName === this.url) {
-          alert('ALREADY EXIST!');
           this.isPageNameExist = true;
+          return;
         } else {
           this.isPageNameExist = false;
         }
@@ -80,6 +80,10 @@ label {
 
 p {
   margin: 0;
+}
+.custom-error {
+  display: inline-block;
+  margin-bottom: 5px;
 }
 </style>
 
