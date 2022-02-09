@@ -1,4 +1,7 @@
 <template>
+  <base-dialog :show="!!error" title="An error occured!" @close="handleError">
+    <p>{{ error }}</p>
+  </base-dialog>
   <base-card>
     <page-form></page-form>
   </base-card>
@@ -7,10 +10,12 @@
     created pages {{ createdPages }}
 
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
+      <base-spinner v-if="isLoading"></base-spinner>
       <div
         v-for="(page, index) in createdPages"
         :key="index"
         class="page-list-item"
+        v-else
       >
         <router-link :to="`/page/${page.urlName}`" v-if="!page.isRenaming">{{
           page.urlName
@@ -57,6 +62,8 @@ export default {
   data() {
     return {
       renamingAlias: "",
+      isLoading: false,
+      error: null
     };
   },
   computed: {
@@ -65,6 +72,16 @@ export default {
     },
   },
   methods: {
+    async loadPages() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('loadPagesData');
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!'
+      }
+      
+      this.isLoading = false;
+    },
     renameAlias(id, urlName) {
       this.renamingAlias = urlName;
       this.$store.dispatch("renameUrl", id);
@@ -88,7 +105,13 @@ export default {
     deleteAlias(index) {
       this.$store.dispatch("deleteUrl", index);
     },
+    handleError() {
+      this.error = null;
+    }
   },
+  created() {
+    this.loadPages();
+  }
 };
 </script>
 

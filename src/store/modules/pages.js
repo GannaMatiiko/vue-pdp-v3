@@ -10,11 +10,41 @@ export default {
         },
     },
     actions: {
-        loadPagesData(context, payload) {
-            context.commit('initPagesData', payload);
+        async loadPagesData(context) {
+            const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json');
+            const responseData = await response.json();
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to fetch');
+                throw error;
+            }
+            
+            const pages = [];
+            for (let key in responseData) {
+                const page = {
+                    id: responseData[key].id,
+                    urlName: responseData[key].urlName
+                }
+                pages.push(page);
+            }
+            context.commit('initPagesData', pages);
         },
-        addUrl(context, payload) {
-            context.commit('storeNewUrl', payload);
+        async addUrl(context, payload) {
+            const urlData = {
+                id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
+                urlName: payload,
+                assignedFormValues: []
+            }
+            const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json', {
+                method: 'POST',
+                body: JSON.stringify(urlData)
+            })
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to fetch');
+                throw error;
+            }
+            context.commit('storeNewUrl', urlData);
         },
         renameUrl(context, payload) {
             context.commit('renameUrl', payload);
@@ -30,8 +60,8 @@ export default {
         }
     },
     mutations: {
-        initPagesData(state, payload) {
-            state.savedPages = payload;
+        initPagesData(state, pages) {
+            state.savedPages = pages;
         },
         assignFormValueToPage(state, payload) {
             console.log('PAGE DATA', payload);
@@ -42,13 +72,8 @@ export default {
             //     }
             // });
         },
-        storeNewUrl(state, payload) {
-            state.savedPages.push({
-                id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
-                urlName: payload,
-                assignedFormValues: []
-            });
-            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
+        storeNewUrl(state, urlData) {
+            state.savedPages.push(urlData);
         },
         renameUrl(state, payload) {
             for (let key in state.savedPages) {
