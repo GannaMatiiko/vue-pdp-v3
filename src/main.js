@@ -9,6 +9,7 @@ import { faPhone, faEdit, faSave, faTrash, faPlus, faLayerGroup, faCopy, faHome 
 
 import BaseButton from './components/ui/BaseButton.vue';
 import BaseCard from './components/ui/BaseCard.vue';
+import BaseSpinner from './components/ui/BaseSpinner.vue';
 
 import { defineRule } from 'vee-validate';
 
@@ -27,6 +28,7 @@ library.add(faPhone, faEdit, faSave, faTrash, faPlus, faLayerGroup, faCopy, faHo
 
 app.component('base-button', BaseButton);
 app.component('base-card', BaseCard);
+app.component('base-spinner', BaseSpinner);
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 
