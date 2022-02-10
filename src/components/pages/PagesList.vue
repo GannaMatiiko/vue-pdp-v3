@@ -27,18 +27,18 @@
         <span class="error error-label" v-if="page.hasError === 'notLatin'">Field should contain only Latin characters and numbers</span>
         <div>
           <base-button
-            @click="renameAlias(page.id, page.urlName)"
+            @click="renameAlias(page.id, page.firebaseId, page.urlName)"
             v-if="!page.isRenaming"
           >
             Rename <font-awesome-icon :icon="['fas', 'edit']" />
           </base-button>
 
-          <base-button @click="proccessRename(page.id)" v-else>
+          <base-button @click="proccessRename(page.id, page.firebaseId)" v-else>
             Update <font-awesome-icon :icon="['fas', 'save']" />
           </base-button>
 
-          <base-button @click="deleteAlias(index)">
-            Delete <font-awesome-icon :icon="['fas', 'trash']" />
+          <base-button @click="deleteAlias(page.firebaseId)">
+            Delete {{page.firebaseId}} <font-awesome-icon :icon="['fas', 'trash']" />
           </base-button>
         </div>
       </div>
@@ -82,11 +82,15 @@ export default {
       
       this.isLoading = false;
     },
-    renameAlias(id, urlName) {
+    renameAlias(id, fbId, urlName) {
       this.renamingAlias = urlName;
-      this.$store.dispatch("renameUrl", id);
+      const idS = {
+        id,
+        fbId
+      }
+      this.$store.dispatch("renameUrl", idS);
     },
-    proccessRename(id) {
+    proccessRename(id, fbId) {
       let inputHasError = null;
       if (this.renamingAlias === '') {
         inputHasError = 'emptyInput';
@@ -98,7 +102,8 @@ export default {
       }
       this.$store.dispatch("onUrlRenameCompleted", {
         id: id,
-        newValue: this.renamingAlias,
+        fbId: fbId,
+        urlName: this.renamingAlias,
         error: inputHasError
       });
     },

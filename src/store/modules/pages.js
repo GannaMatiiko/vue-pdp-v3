@@ -17,15 +17,17 @@ export default {
                 const error = new Error(responseData.message || 'Failed to fetch');
                 throw error;
             }
-            
+
             const pages = [];
             for (let key in responseData) {
                 const page = {
+                    firebaseId: key,
                     id: responseData[key].id,
-                    urlName: responseData[key].urlName
+                    urlName: responseData[key].urlName,
                 }
                 pages.push(page);
             }
+            console.log('чем наполнились пейджес?', pages)
             context.commit('initPagesData', pages);
         },
         async addUrl(context, payload) {
@@ -36,24 +38,41 @@ export default {
             }
             const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json', {
                 method: 'POST',
-                body: JSON.stringify(urlData)
+                body: JSON.stringify(urlData),
             })
             const responseData = await response.json();
-
             if (!response.ok) {
                 const error = new Error(responseData.message || 'Failed to fetch');
                 throw error;
             }
+            urlData.firebaseId = responseData.name;
             context.commit('storeNewUrl', urlData);
         },
         renameUrl(context, payload) {
-            context.commit('renameUrl', payload);
+            context.commit('renameUrl', payload.id);
+            console.log('action on rename begin', payload.id)
         },
-        onUrlRenameCompleted(context, payload) {
+        async onUrlRenameCompleted(context, payload) {
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${payload.fbId}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            })
+            if (!response.ok) {
+                const error = new Error('Failed to rename');
+                throw error;
+            }
             context.commit('onUrlRenameCompleted', payload);
+            console.log('action on rename completed', payload)
         },
-        deleteUrl(context, payload) {
-            context.commit('removeUrl', payload);
+        async deleteUrl(context, id) {
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${id}.json`, {
+                method: 'DELETE',
+            })
+            if (!response.ok) {
+                const error = new Error('Failed to delete');
+                throw error;
+            }
+            context.commit('removeUrl', id);
         },
         assignFormValueToPage(context, payload) {
             context.commit('assignFormValueToPage', payload);
@@ -84,8 +103,9 @@ export default {
             }
         },
         onUrlRenameCompleted(state, payload) {
+            console.log('payload inside mutation rename completed', payload);
             let renamedObjectIndex = state.savedPages.findIndex(x => x.id == payload.id);
-            state.savedPages[renamedObjectIndex].urlName = payload.newValue.replace(/\s+/g, "-").toLowerCase();
+            state.savedPages[renamedObjectIndex].urlName = payload.urlName.replace(/\s+/g, "-").toLowerCase();
 
             for (let key in state.savedPages) {
                 delete state.savedPages[key].hasError;
@@ -104,11 +124,13 @@ export default {
                     }
                 }
             }
-            
+
         },
         removeUrl(state, payload) {
-            state.savedPages.splice(payload, 1);
-            localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
+            const index = state.savedPages.findIndex(page => page.firebaseId === payload);
+            if (index > -1) {
+                state.savedPages.splice(index, 1);
+            }
         }
     }
 }
