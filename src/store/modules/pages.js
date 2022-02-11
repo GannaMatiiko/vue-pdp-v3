@@ -1,16 +1,30 @@
 export default {
     state() {
         return {
-            savedPages: []
+            savedPages: [],
+            lastFetch: null
         }
     },
     getters: {
         getCreatedPages(state) {
             return state.savedPages;
         },
+        shouldUpdate(state) {
+            const lastFetch = state.lastFetch;
+            if (!lastFetch) {
+                return true;
+            }
+            const currentTimeStamp = new Date().getTime();
+            // for caching fetched pages for 1 min
+            return (currentTimeStamp - lastFetch) / 1000 > 60;
+        }
     },
     actions: {
         async loadPagesData(context) {
+            if (!context.getters.shouldUpdate) {
+                return;
+            }
+            
             const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json');
             const responseData = await response.json();
             if (!response.ok) {
@@ -27,6 +41,7 @@ export default {
                 pages.push(page);
             }
             context.commit('initPagesData', pages);
+            context.commit('setFetchTimestamp');
         },
         async addUrl(context, payload) {
             const urlData = {
@@ -76,6 +91,9 @@ export default {
     mutations: {
         initPagesData(state, pages) {
             state.savedPages = pages;
+        },
+        setFetchTimestamp(state) {
+            state.lastFetch = new Date().getTime();
         },
         assignFormValueToPage(state, payload) {
             console.log('PAGE DATA', payload);
