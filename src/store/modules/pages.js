@@ -27,7 +27,6 @@ export default {
                 }
                 pages.push(page);
             }
-            console.log('чем наполнились пейджес?', pages)
             context.commit('initPagesData', pages);
         },
         async addUrl(context, payload) {
@@ -99,6 +98,8 @@ export default {
                 delete state.savedPages[key].isRenaming;
                 if (state.savedPages[key].id === payload) {
                     state.savedPages[key].isRenaming = true;
+                } else {
+                    state.savedPages[key].disabled = true;
                 }
             }
         },
@@ -120,7 +121,7 @@ export default {
                     else {
                         state.savedPages[key].hasError = false;
                         delete state.savedPages[renamedObjectIndex].isRenaming;
-                        localStorage.setItem("createdPages", JSON.stringify(state.savedPages));
+                        state.savedPages.forEach((page) => page.disabled = false)
                     }
                 }
             }

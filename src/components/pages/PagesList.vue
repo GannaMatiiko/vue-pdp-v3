@@ -7,7 +7,7 @@
   </base-card>
   <base-card>
     <h3>Pages List</h3>
-    created pages {{ createdPages }}
+    <pre>created pages {{ createdPages }}</pre>
 
     <base-card v-if="createdPages && Object.keys(createdPages).length > 0">
       <base-spinner v-if="isLoading"></base-spinner>
@@ -29,6 +29,7 @@
           <base-button
             @click="renameAlias(page.id, page.firebaseId, page.urlName)"
             v-if="!page.isRenaming"
+            :disabled="page.disabled"
           >
             Rename <font-awesome-icon :icon="['fas', 'edit']" />
           </base-button>
@@ -38,7 +39,7 @@
           </base-button>
 
           <base-button @click="deleteAlias(page.firebaseId)">
-            Delete {{page.firebaseId}} <font-awesome-icon :icon="['fas', 'trash']" />
+            Delete <font-awesome-icon :icon="['fas', 'trash']" />
           </base-button>
         </div>
       </div>

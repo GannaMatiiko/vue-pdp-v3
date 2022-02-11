@@ -7,6 +7,11 @@ const store = createStore({
     modules: {
         forms: formsModule,
         pages: pagesModule,
+    },
+    state() {
+        return {
+            userId: 'c3'
+        }
     }
 });
 

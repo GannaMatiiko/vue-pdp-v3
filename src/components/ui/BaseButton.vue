@@ -45,6 +45,12 @@ a {
   display: inline-block;
 }
 
+button[disabled],
+button:disabled {
+  background-color: #624b72 !important;
+  border: 1px solid #624b72 !important;
+}
+
 a:hover,
 a:active,
 button:hover,
