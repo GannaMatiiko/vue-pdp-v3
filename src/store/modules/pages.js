@@ -43,9 +43,10 @@ export default {
             context.commit('initPagesData', pages);
             context.commit('setFetchTimestamp');
         },
-        async addUrl(context, payload) {
+        async addUrl({commit, rootGetters}, payload) {
             const urlData = {
                 urlName: payload,
+                userId: rootGetters.getUserId,
                 assignedFormValues: []
             }
             const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json', {
@@ -58,7 +59,7 @@ export default {
                 throw error;
             }
             urlData.fbId = responseData.name;
-            context.commit('storeNewUrl', urlData);
+            commit('storeNewUrl', urlData);
         },
         renameUrl(context, fbId) {
             context.commit('renameUrl', fbId);
