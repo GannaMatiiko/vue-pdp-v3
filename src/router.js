@@ -6,6 +6,8 @@ import FormTemplate from './components/forms/FormTemplate.vue';
 import PagesList from './components/pages/PagesList.vue';
 import Page from './components/pages/Page.vue';
 
+import UserAuth from './components/auth/UserAuth.vue';
+
 import NotFound from './components/NotFound.vue';
 
 const router = createRouter({
@@ -17,6 +19,7 @@ const router = createRouter({
         { path: '/forms-list', component: FormGroupsList },
         { path: '/add', component: FormTemplate},
         { path: '/edit/:id', component: FormTemplate},
+        { path: '/auth', component: UserAuth},
         { path: '/:notFound(.*)', component: NotFound },
     ]
 });

@@ -67,17 +67,6 @@ export default {
 </script>
 
 <style scoped>
-.form-control {
-  margin: 1rem 0;
-  position: relative;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
 p {
   margin: 0;
 }

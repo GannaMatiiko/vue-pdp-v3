@@ -36,6 +36,21 @@ body {
   /* background: rgb(55, 57, 59); */
   /* color: #fff; */
 }
+form {
+  margin: 1rem;
+  border-radius: 12px;
+  padding: 1rem;
+}
+.form-control {
+  margin: 1rem 0;
+  position: relative;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+}
 .input-type {
   display: flex;
   align-items: center;
