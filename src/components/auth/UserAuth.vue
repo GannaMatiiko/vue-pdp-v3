@@ -10,7 +10,7 @@
       <Form @submit="submitForm" :validation-schema="schema">
         <div class="form-control">
           <label for="email">E-Mail</label>
-          <Field type="email" id="email" name="authEmail" v-model="email" />
+          <Field type="email" id="email" name="authEmail" v-model.trim="email" />
           <ErrorMessage
             name="authEmail"
             class="error formgroup-error"
@@ -22,7 +22,7 @@
             type="password"
             id="password"
             name="authPassword"
-            v-model="password"
+            v-model.trim="password"
           />
           <ErrorMessage
             name="authPassword"
@@ -90,6 +90,7 @@ export default {
         } else {
           await this.$store.dispatch("signup", actionPayload);
         }
+        this.$router.replace('/forms-list');
       } catch (err) {
         this.error = err.message || "Failed to authenticate, try later";
       }

@@ -20,12 +20,16 @@ export default {
         }
     },
     actions: {
-        async loadPagesData(context) {
-            if (!context.getters.shouldUpdate) {
+        async loadPagesData({commit, getters, rootGetters}) {
+            if (!getters.shouldUpdate) {
                 return;
             }
             
-            const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json');
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            console.log('token on load', token);
+            console.log('id on load', userId);
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}.json?auth=` + token);
             const responseData = await response.json();
             if (!response.ok) {
                 const error = new Error(responseData.message || 'Failed to fetch');
@@ -40,8 +44,8 @@ export default {
                 }
                 pages.push(page);
             }
-            context.commit('initPagesData', pages);
-            context.commit('setFetchTimestamp');
+            commit('initPagesData', pages);
+            commit('setFetchTimestamp');
         },
         async addUrl({commit, rootGetters}, payload) {
             const urlData = {
@@ -49,7 +53,11 @@ export default {
                 userId: rootGetters.getUserId,
                 assignedFormValues: []
             }
-            const response = await fetch('https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages.json', {
+            const userId = rootGetters.getUserId;
+            console.log('userId when add', userId);
+            const token = rootGetters.token;
+            console.log('!!!!', userId, token);
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}.json?auth=` + token, {
                 method: 'POST',
                 body: JSON.stringify(urlData),
             })
@@ -64,8 +72,10 @@ export default {
         renameUrl(context, fbId) {
             context.commit('renameUrl', fbId);
         },
-        async onUrlRenameCompleted(context, payload) {
-            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${payload.fbId}.json`, {
+        async onUrlRenameCompleted({commit, rootGetters}, payload) {
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}/${payload.fbId}.json?auth=` + token, {
                 method: 'PUT',
                 body: JSON.stringify(payload)
             })
@@ -73,17 +83,19 @@ export default {
                 const error = new Error('Failed to rename');
                 throw error;
             }
-            context.commit('onUrlRenameCompleted', payload);
+            commit('onUrlRenameCompleted', payload);
         },
-        async deleteUrl(context, id) {
-            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${id}.json`, {
+        async deleteUrl({commit, rootGetters}, id) {
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}/${id}.json?auth=` + token, {
                 method: 'DELETE',
             })
             if (!response.ok) {
                 const error = new Error('Failed to delete');
                 throw error;
             }
-            context.commit('removeUrl', id);
+            commit('removeUrl', id);
         },
         assignFormValueToPage(context, payload) {
             context.commit('assignFormValueToPage', payload);

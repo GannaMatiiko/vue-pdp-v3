@@ -21,6 +21,8 @@ export default {
     if (createdPages) {
       this.$store.dispatch("loadPagesData", createdPages);
     }
+
+    this.$store.dispatch('tryLogin');
   },
 };
 </script>
