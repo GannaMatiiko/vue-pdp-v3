@@ -20,12 +20,13 @@ export default {
         }
     },
     actions: {
-        async loadPagesData({commit, getters, rootGetters}) {
-            if (!getters.shouldUpdate) {
-                return;
-            }
+        async loadPagesData({commit, rootGetters}) {
+            // if (!getters.shouldUpdate) {
+            //     return;
+            // }
             
-            const userId = rootGetters.getUserId;
+            // const userId = rootGetters.getUserId;
+            const userId = localStorage.getItem('userId');
             const token = rootGetters.token;
             console.log('token on load', token);
             console.log('id on load', userId);

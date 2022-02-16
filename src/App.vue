@@ -10,20 +10,33 @@ export default {
     TheHeader,
   },
   created() {
-    const createdFormGroups = JSON.parse(
-      localStorage.getItem("createdFormGroups")
-    );
-    if (createdFormGroups) {
-      this.$store.dispatch("loadFormData", createdFormGroups);
-    }
+    // const createdFormGroups = JSON.parse(
+    //   localStorage.getItem("createdFormGroups")
+    // );
+    // if (createdFormGroups) {
+    //   this.$store.dispatch("loadFormData", createdFormGroups);
+    // }
 
-    const createdPages = JSON.parse(localStorage.getItem("createdPages"));
-    if (createdPages) {
-      this.$store.dispatch("loadPagesData", createdPages);
-    }
+    // const createdPages = JSON.parse(localStorage.getItem("createdPages"));
+    // if (createdPages) {
+    //   this.$store.dispatch("loadPagesData", createdPages);
+    // }
 
     this.$store.dispatch('tryLogin');
   },
+  computed: {
+    didAutoLogout() {
+      return this.$store.getters.didAutoLogout;
+    }
+  },
+  watch: {
+    didAutoLogout(curValue, oldValue) {
+      console.log("текущеее значение", curValue, 'старое значение', oldValue);
+      if (curValue && curValue !== oldValue) {
+        this.$router.replace('/auth')
+      }
+    }
+  }
 };
 </script>
 
