@@ -20,10 +20,17 @@ export default {
         }
     },
     actions: {
-        async loadPagesData({commit, rootGetters}) {
-            // if (!getters.shouldUpdate) {
-            //     return;
-            // }
+        async loadPagesData({commit, getters, rootGetters}) {
+            if (!localStorage.getItem('currentUserId')) {
+                localStorage.setItem('currentUserId', rootGetters.getUserId);
+            }
+            const prevUserId = localStorage.getItem('currentUserId');
+            const currentUserId = localStorage.getItem('userId');
+            console.log('prev', prevUserId, 'curr', currentUserId);
+
+            if (!getters.shouldUpdate) {
+                return;
+            }
             
             // const userId = rootGetters.getUserId;
             const userId = localStorage.getItem('userId');
