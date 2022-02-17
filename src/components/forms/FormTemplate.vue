@@ -22,17 +22,17 @@
         <div class="form-input-group-inner">
           <div>
             <span class="field-descr">Field label<span class="required">*</span></span>
-            <Field type="text" name="fieldLabel" v-model="input.label" rules="required"/>
-            <ErrorMessage name="fieldLabel" class="error field-error" />
+            <Field type="text" :name="'fieldLabel' + i" v-model="input.label" rules="required"/>
+            <ErrorMessage :name="'fieldLabel' + i" class="error field-error" />
           </div>
           <div>
             <span class="field-descr">Field name<span class="required">*</span></span>
-            <Field type="text" name="fieldName" v-model="input.name" rules="required"/>
-            <ErrorMessage name="fieldName" class="error field-error" />
+            <Field type="text" :name="'fieldName' + i" v-model="input.name" rules="required"/>
+            <ErrorMessage :name="'fieldName' + i" class="error field-error" />
           </div>
           <div>
             <span class="field-descr">Field type<span class="required">*</span></span>
-            <Field name="fieldType" as="select" v-model="input.type" @change="onTypeChange($event, input)" rules="required">
+            <Field :name="'fieldType' + i" as="select" v-model="input.type" @change="onTypeChange($event, input)" rules="required">
               <option value disabled selected>Choose type</option>
               <option value="text">Text</option>
               <option value="textarea">Textarea</option>
@@ -41,7 +41,7 @@
               <option value="group">Group</option>
               <option value="repeater">Repeater</option>
             </Field>
-            <ErrorMessage name="fieldType" class="error field-error" />
+            <ErrorMessage :name="'fieldType' + i" class="error field-error" />
           </div>
           <div>
             <span class="field-descr">Required?</span>
@@ -54,13 +54,13 @@
           </div>
           <div v-if="input.type === 'image'">
             <span class="field-descr">Preview size<span class="required">*</span></span>
-            <Field name="previewSize" as="select" v-model="input.previewSize" rules="required">
+            <Field :name="'previewSize' + i" as="select" v-model="input.previewSize" rules="required">
               <option value disabled selected>Choose image size</option>
               <option value="small">Small(150x150)</option>
               <option value="medium">Medium(300x300)</option>
               <option value="large">Large(450x450)</option>
             </Field>
-            <ErrorMessage name="previewSize" class="error field-error" />
+            <ErrorMessage :name="'previewSize' + i" class="error field-error" />
           </div>
         </div>
         <div>

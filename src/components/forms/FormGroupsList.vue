@@ -38,6 +38,9 @@ export default {
       this.$store.dispatch("initDeletingGroup", id);
     },
   },
+  created() {
+    this.$store.dispatch('loadFormData');
+  }
 };
 </script>
 

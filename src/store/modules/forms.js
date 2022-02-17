@@ -13,19 +13,51 @@ export default {
         }
     },
     actions: {
-        loadFormData(context, payload) {
-            context.commit('initFormData', payload);
+        async loadFormData({commit, rootGetters}) {            
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdGroups/${userId}.json?auth=` + token);
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to fetch');
+                throw error;
+            }
+
+            commit('initFormData', responseData);
         },
-        saveForm(context, payload) {
-            // here data will be sent to server
-            
-            context.commit('addFormData', payload);
+        async saveForm({commit, rootGetters}, payload) {
+            const formGroupData = payload;
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdGroups/${userId}.json?auth=` + token, {
+                method: 'POST',
+                body: JSON.stringify(formGroupData),
+            })
+            const responseData = await response.json();
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to fetch');
+                throw error;
+            }
+            formGroupData.fbId = responseData.name;
+
+            commit('addFormData', formGroupData);
         },
         updateForm(context, payload) {
             context.commit('updateFormData', payload);
         },
-        initDeletingGroup(context, id) {
-            context.commit('deleteGroup', id);
+        async initDeletingGroup({commit, rootGetters}, id) {
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdGroups/${userId}/${id}.json?auth=` + token, {
+                method: 'DELETE',
+            })
+            if (!response.ok) {
+                const error = new Error('Failed to delete');
+                throw error;
+            }
+
+            commit('deleteGroup', id);
         }
     },
     mutations: {
@@ -33,9 +65,7 @@ export default {
             state.formGroups = data;
         },
         addFormData(state, data) {
-            let randomId = Math.floor(Date.now() * Math.random());
-            state.formGroups[randomId] = data;
-            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
+            state.formGroups[data.fbId] = data;
         },
         updateFormData(state, data) {
             let id = data.id;
@@ -44,7 +74,6 @@ export default {
         },
         deleteGroup(state, id) {
             delete state.formGroups[id];
-            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
         }
     },
 }

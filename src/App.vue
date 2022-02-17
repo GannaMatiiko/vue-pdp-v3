@@ -31,7 +31,6 @@ export default {
   },
   watch: {
     didAutoLogout(curValue, oldValue) {
-      console.log("текущеее значение", curValue, 'старое значение', oldValue);
       if (curValue && curValue !== oldValue) {
         this.$router.replace('/auth')
       }

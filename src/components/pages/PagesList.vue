@@ -77,7 +77,6 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('loadPagesData');
-        console.log('check LOAD PAGES DATA INSIDE AWAIT')
       } catch (error) {
         this.error = error.message || 'Something went wrong!'
       }
@@ -113,12 +112,7 @@ export default {
   },
   created() {
     this.loadPages();
-    console.log('pages list comt is created!!!');
   },
-  updated() {
-    this.loadPages();
-    console.log('pages list comt is updated!!!');
-  }
 };
 </script>
 
