@@ -21,22 +21,12 @@ export default {
     },
     actions: {
         async loadPagesData({commit, getters, rootGetters}) {
-            if (!localStorage.getItem('currentUserId')) {
-                localStorage.setItem('currentUserId', rootGetters.getUserId);
-            }
-            const prevUserId = localStorage.getItem('currentUserId');
-            const currentUserId = localStorage.getItem('userId');
-            console.log('prev', prevUserId, 'curr', currentUserId);
-
             if (!getters.shouldUpdate) {
                 return;
             }
             
-            // const userId = rootGetters.getUserId;
-            const userId = localStorage.getItem('userId');
+            const userId = rootGetters.getUserId;
             const token = rootGetters.token;
-            console.log('token on load', token);
-            console.log('id on load', userId);
             const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}.json?auth=` + token);
             const responseData = await response.json();
             if (!response.ok) {
@@ -62,9 +52,7 @@ export default {
                 assignedFormValues: []
             }
             const userId = rootGetters.getUserId;
-            console.log('userId when add', userId);
             const token = rootGetters.token;
-            console.log('!!!!', userId, token);
             const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdPages/${userId}.json?auth=` + token, {
                 method: 'POST',
                 body: JSON.stringify(urlData),

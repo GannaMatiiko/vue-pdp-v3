@@ -99,6 +99,8 @@ export default {
             localStorage.removeItem('userId');
             localStorage.removeItem('tokenExpiration');
 
+            this.state.pages.lastFetch = null;
+
             clearTimeout(timer);
 
             context.commit('setUser', {
