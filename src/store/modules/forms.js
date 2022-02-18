@@ -13,7 +13,10 @@ export default {
         }
     },
     actions: {
-        async loadFormData({commit, rootGetters}) {            
+        async loadFormData({commit, rootGetters}) {   
+            if (!rootGetters.shouldUpdate) {
+                return;
+            }
             const userId = rootGetters.getUserId;
             const token = rootGetters.token;
             const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdGroups/${userId}.json?auth=` + token);
@@ -39,12 +42,22 @@ export default {
                 const error = new Error(responseData.message || 'Failed to fetch');
                 throw error;
             }
-            formGroupData.fbId = responseData.name;
+            formGroupData.id = responseData.name;
 
             commit('addFormData', formGroupData);
         },
-        updateForm(context, payload) {
-            context.commit('updateFormData', payload);
+        async updateForm({commit, rootGetters}, payload) {
+            const userId = rootGetters.getUserId;
+            const token = rootGetters.token;
+            const response = await fetch(`https://vue-pdp-default-rtdb.europe-west1.firebasedatabase.app/createdGroups/${userId}/${payload.id}.json?auth=` + token, {
+                method: 'PUT',
+                body: JSON.stringify(payload.formGroup)
+            })
+            if (!response.ok) {
+                const error = new Error('Failed to rename');
+                throw error;
+            }
+            commit('updateFormData', payload);
         },
         async initDeletingGroup({commit, rootGetters}, id) {
             const userId = rootGetters.getUserId;
@@ -65,12 +78,11 @@ export default {
             state.formGroups = data;
         },
         addFormData(state, data) {
-            state.formGroups[data.fbId] = data;
+            state.formGroups[data.id] = data;
         },
         updateFormData(state, data) {
             let id = data.id;
             state.formGroups[id] = data.formGroup;
-            localStorage.setItem("createdFormGroups", JSON.stringify(state.formGroups));
         },
         deleteGroup(state, id) {
             delete state.formGroups[id];
