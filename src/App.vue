@@ -10,18 +10,6 @@ export default {
     TheHeader,
   },
   created() {
-    // const createdFormGroups = JSON.parse(
-    //   localStorage.getItem("createdFormGroups")
-    // );
-    // if (createdFormGroups) {
-    //   this.$store.dispatch("loadFormData", createdFormGroups);
-    // }
-
-    // const createdPages = JSON.parse(localStorage.getItem("createdPages"));
-    // if (createdPages) {
-    //   this.$store.dispatch("loadPagesData", createdPages);
-    // }
-
     this.$store.dispatch('tryLogin');
   },
   computed: {
@@ -67,8 +55,17 @@ label {
 }
 .input-type {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
+}
+.input-type input,
+.input-type textarea {
+  width: 100%;
+}
+
+.left-align {
+  text-align: left;
 }
 
 label {

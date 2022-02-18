@@ -1,6 +1,6 @@
 <template>
   <div class="input-type">
-    <label :for="name">Label is {{ label }}</label>
+    <label :for="name">{{ label }}<span v-if="isRequired !== null" class="required">*</span></label>
     <textarea
       :id="name"
       :name="name"
@@ -11,12 +11,7 @@
     ></textarea>
     <b>Default value is {{ defaultValue }}</b>
     <br />
-    <span v-if="isRequired !== null">Field is required!*</span>
   </div>
-
-  <pre>{{ groupData }}</pre>
-
-  <h1>{{ this.groupId }} - {{ groupPosition }}</h1>
 </template>
 
 <script>

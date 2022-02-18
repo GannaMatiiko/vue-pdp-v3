@@ -1,14 +1,14 @@
 <template>
-  <label :for="name">Label is {{ label }}</label>
+  <label :for="name">{{ label }}<span v-if="isRequired !== 'false'" class="required">* {{isRequired}}</span></label>
   <input
     :name="name"
-    :required="isRequired !== null"
+    :required="isRequired !== 'false'"
     type="file"
     accept="image/png, image/jpeg"
     @change="changeInputValue($event)"
   />
   <br />
-  <img v-if="item.imageUrl" :src="item.imageUrl" class="image" />
+  <img v-if="item.imageUrl" :src="item.imageUrl" :width="imageWidthHeight" :height="imageWidthHeight" class="image" />
   {{ groupData }} image group data
 </template>
 
@@ -26,6 +26,19 @@ export default {
       isRequired: this.groupData.isRequired,
       imageSize: this.groupData.previewSize,
     };
+  },
+  computed: {
+    imageWidthHeight() {
+      if (this.imageSize === 'small') {
+        return 150
+      } else if (this.imageSize === 'medium') {
+        return 300
+      } else if (this.imageSize === 'large') {
+        return 450
+      } else {
+        return 300
+      }
+    }
   },
   methods: {
     changeInputValue(e) {
@@ -54,7 +67,7 @@ export default {
 <style scoped>
 .image {
   object-fit: cover;
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
 }
 </style>

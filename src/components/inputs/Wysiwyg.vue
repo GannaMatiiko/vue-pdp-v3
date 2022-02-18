@@ -1,5 +1,5 @@
 <template>
-  <label :for="name">Label is {{ label }}</label>
+  <label :for="name">{{ label }}<span v-if="isRequired !== null" class="required">*</span></label>
   <quill-editor
     :name="name"
     :required="isRequired !== null"

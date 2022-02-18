@@ -1,6 +1,6 @@
 <template>
   <div class="input-type">
-    <label :for="name">Label is {{ label }}</label>
+    <label :for="name">{{ label }}<span v-if="isRequired !== null" class="required">*</span></label>
     <input
       :id="name"
       :name="name"
@@ -9,12 +9,8 @@
       @input="defaultValue = $event.target.value"
       @change="changeInputValue()"
     />
-    <span v-if="isRequired !== null">Field is required!*</span>
   </div>
 
-  <pre>{{ this.defaultValue }}</pre>
-
-  <h1>{{ this.groupId }} - {{ groupPosition }}</h1>
 </template>
 
 <script>

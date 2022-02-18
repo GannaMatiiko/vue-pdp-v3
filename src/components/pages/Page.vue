@@ -8,8 +8,8 @@
   </base-card>
 
   <base-card v-if="chosenIds && chosenIds.length > 0">
-    <div v-for="(group, groupIndex) in chosenGroups" :key="group">
-      {{ groupIndex }} h
+    <base-card v-for="(group, groupIndex) in chosenGroups" :key="group">
+      {{ groupIndex }} {{ group.title }}
       <div
         v-for="(groupData, groupDataIndex) in group.inputsData"
         :key="groupData"
@@ -32,7 +32,7 @@
             @initInputChanges="onInitInputChanges"
           ></Textarea>
         </div>
-        <div v-if="groupData.type === 'image'">
+        <div v-if="groupData.type === 'image'" class="left-align">
           <Image
             :groupData="groupData"
             :groupId="this.chosenIds[groupIndex]"
@@ -40,7 +40,7 @@
             @initInputChanges="onInitInputChanges"
           ></Image>
         </div>
-        <div v-if="groupData.type === 'wysiwyg'">
+        <div v-if="groupData.type === 'wysiwyg'" class="left-align">
           <Wysiwyg
             :groupData="groupData"
             @initInputChanges="onInitInputChanges"
@@ -49,15 +49,11 @@
           ></Wysiwyg>
         </div>
       </div>
-    </div>
-  </base-card>
-  <base-card>
+    </base-card>
     <base-button @click="saveAssignedFormsToPage" to="/pages-list"
       link>Save</base-button>
   </base-card>
 
-  <pre>{{ createdForms }}</pre>
-  <div>Page name is {{ pageName }}</div>
   <br />
 </template>
 
